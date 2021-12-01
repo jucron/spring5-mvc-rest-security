@@ -6,7 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Bootstrap implements CommandLineRunner {
+public class Bootstrap implements CommandLineRunner{
+
     private CategoryRepository categoryRepository;
 
     public Bootstrap(CategoryRepository categoryRepository) {
@@ -36,6 +37,8 @@ public class Bootstrap implements CommandLineRunner {
         categoryRepository.save(exotic);
         categoryRepository.save(nuts);
 
-        System.out.println("Data loaded = "+categoryRepository.count());
+
+        System.out.println("Data Loaded = " + categoryRepository.count() );
+
     }
 }
