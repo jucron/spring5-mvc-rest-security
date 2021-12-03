@@ -19,7 +19,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<CategoryListDTO> getAllCategories() {
         return new ResponseEntity<CategoryListDTO>(
                 new CategoryListDTO(categoryService.getAllCategories()), HttpStatus.OK);
