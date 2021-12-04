@@ -38,6 +38,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomerById(Long id) {
+        if (customerRepository.getCustomerById(id)==null) throw new ResourceNotFoundException();
+
         CustomerDTO customerDTO =customerMapper.customerToCustomerDTO(
                 customerRepository.getCustomerById(id));
         customerDTO.setCustomerUrl(URL+id);
@@ -84,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
             returnDTO.setCustomerUrl(URL+id);
 
             return returnDTO;
-        }).orElseThrow(RuntimeException::new); //todo implement better exception handling;
+        }).orElseThrow(ResourceNotFoundException::new);
 
     }
 
