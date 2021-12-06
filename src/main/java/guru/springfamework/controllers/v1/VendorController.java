@@ -29,6 +29,7 @@ public class VendorController {
         return vendorService.getAllVendors();
     }
 
+    @ApiOperation(value = "This will get a specific vendor, using the ID.")
     @GetMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public VendorDTO getVendorById(@PathVariable Long id){
