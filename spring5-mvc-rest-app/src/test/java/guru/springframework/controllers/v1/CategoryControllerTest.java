@@ -3,8 +3,8 @@ package guru.springframework.controllers.v1;
 import guru.springframework.api.v1.model.CategoryDTO;
 import guru.springframework.services.CategoryService;
 import guru.springframework.services.ResourceNotFoundException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CategoryControllerTest {
+class CategoryControllerTest {
 
     public static final String NAME = "Jim";
 
@@ -37,8 +37,8 @@ public class CategoryControllerTest {
     MockMvc mockMvc;
     String BASE_URL = CategoryController.BASE_URL;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
@@ -50,7 +50,7 @@ public class CategoryControllerTest {
     @Test
     public void testListCategories() throws Exception {
         CategoryDTO category1 = new CategoryDTO();
-        category1.setId(1l);
+        category1.setId(1L);
         category1.setName(NAME);
 
         CategoryDTO category2 = new CategoryDTO();

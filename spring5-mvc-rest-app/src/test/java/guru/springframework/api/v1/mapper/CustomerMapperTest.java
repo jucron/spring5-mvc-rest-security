@@ -2,11 +2,11 @@ package guru.springframework.api.v1.mapper;
 
 import guru.springframework.domain.Customer;
 import guru.springframework.model.CustomerDTO;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class CustomerMapperTest {
+class CustomerMapperTest {
     public static final String FIRSTNAME = "Joe";
     public static final String LASTNAME = "Doe";
     public static final long ID = 1L;

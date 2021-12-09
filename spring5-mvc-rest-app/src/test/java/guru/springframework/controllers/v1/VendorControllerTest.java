@@ -3,14 +3,12 @@ package guru.springframework.controllers.v1;
 import guru.springframework.api.v1.model.VendorDTO;
 import guru.springframework.api.v1.model.VendorListDTO;
 import guru.springframework.services.VendorService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -26,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @WebMvcTest(controllers = {VendorController.class})
 public class VendorControllerTest {
 
@@ -39,7 +37,7 @@ public class VendorControllerTest {
     VendorDTO vendorDTO_1;
     VendorDTO vendorDTO_2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         vendorDTO_1 = new VendorDTO("Vendor 1", VendorController.BASE_URL + "/1");
         vendorDTO_2 = new VendorDTO("Vendor 2", VendorController.BASE_URL + "/2");

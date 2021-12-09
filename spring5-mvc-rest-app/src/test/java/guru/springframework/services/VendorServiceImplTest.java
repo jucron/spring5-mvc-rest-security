@@ -5,8 +5,8 @@ import guru.springframework.api.v1.model.VendorDTO;
 import guru.springframework.api.v1.model.VendorListDTO;
 import guru.springframework.domain.Vendor;
 import guru.springframework.repositories.VendorRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -36,7 +37,7 @@ public class VendorServiceImplTest {
 
     VendorService vendorService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
@@ -62,17 +63,20 @@ public class VendorServiceImplTest {
     }
 
 
-    @Test(expected = ResourceNotFoundException.class)
+    @Test
     public void getVendorByIdNotFound() throws Exception {
         //given
         //mockito BBD syntax since mockito 1.10.0
         given(vendorRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        //when
-        VendorDTO vendorDTO = vendorService.getVendorById(1L);
-
-        //then
+        //testing and asserting exception
+        Exception exception =
+                assertThrows(ResourceNotFoundException.class, () -> {
+                    vendorService.getVendorById(1L);
+                });
+        //asserting
         then(vendorRepository).should(times(1)).findById(anyLong());
+
 
     }
 

@@ -3,8 +3,8 @@ package guru.springframework.controllers.v1;
 import guru.springframework.model.CustomerDTO;
 import guru.springframework.services.CustomerService;
 import guru.springframework.services.ResourceNotFoundException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -36,7 +36,7 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
     MockMvc mockMvc;
     String BASE_URL = CustomerController.BASE_URL;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 

@@ -4,8 +4,8 @@ import guru.springframework.api.v1.mapper.CustomerMapper;
 import guru.springframework.domain.Customer;
 import guru.springframework.model.CustomerDTO;
 import guru.springframework.repositories.CustomerRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -26,7 +26,7 @@ public class CustomerServiceImplTest {
     @Mock
     CustomerRepository customerRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
