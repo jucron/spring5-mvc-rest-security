@@ -5,4 +5,4 @@
 
 This repository is for an example REST application built in my Spring Framework 5 course.
 
-Check the Swagger Api Documentation: 
+Check the Swagger Api Documentation: [Live Server Test](https://mvc-rest.herokuapp.com/)
