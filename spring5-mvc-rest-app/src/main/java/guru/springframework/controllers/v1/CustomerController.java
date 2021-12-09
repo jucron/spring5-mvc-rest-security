@@ -22,7 +22,7 @@ public class CustomerController {
     }
 
     @ApiOperation(value = "This will get a list of customers.",
-            notes = "These are some notes about the API.")
+            notes = "Consuming this Api will return a consumerListDTO with all Customers.")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public CustomerListDTO getAllCustomers() {
@@ -31,19 +31,24 @@ public class CustomerController {
         return customerListDTO;
 
     }
-
+    @ApiOperation(value = "This will get a singular customer.",
+            notes = "Consuming this Api will return a customer filtered by ID.")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CustomerDTO getCustomerById(@PathVariable Long id) {
         return customerService.getCustomerById(id);
     }
 
+    @ApiOperation(value = "This will create a customer.",
+            notes = "Consuming this Api will create a customer from a resource (customerDTO).")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
         return customerService.createNewCustomer(customerDTO);
     }
 
+    @ApiOperation(value = "This will update a customer.",
+            notes = "Consuming this Api will update a customer from a resource (customerDTO).")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CustomerDTO updateCustomer(@PathVariable Long id,
@@ -51,12 +56,16 @@ public class CustomerController {
         return customerService.saveCustomerByDTO(id, customerDTO);
     }
 
+    @ApiOperation(value = "This will patch a customer.",
+            notes = "Consuming this Api will patch a customer from a resource (customerDTO).")
     @PatchMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService.patchCustomer(id, customerDTO);
     }
 
+    @ApiOperation(value = "This will delete a customer.",
+            notes = "Consuming this Api will delete a customer filtered by ID.")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCustomer(@PathVariable Long id) {

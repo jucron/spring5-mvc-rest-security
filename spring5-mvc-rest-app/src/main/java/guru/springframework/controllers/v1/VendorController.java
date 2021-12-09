@@ -22,7 +22,7 @@ public class VendorController {
     }
 
     @ApiOperation(value = "This will get a list of vendors.",
-            notes = "Here are some notes about the getVendorList API.")
+            notes = "Consuming this Api will return a a List of all vendors.")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public VendorListDTO getVendorList() {
@@ -36,24 +36,31 @@ public class VendorController {
         return vendorService.getVendorById(id);
     }
 
+    @ApiOperation(value = "This will create a vendor.",
+            notes = "Consuming this Api will create a vendor from a resource (vendorDTO).")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VendorDTO createNewVendor(@RequestBody VendorDTO vendorDTO) {
         return vendorService.createNewVendor(vendorDTO);
     }
 
+    @ApiOperation(value = "This will update a vendor.",
+            notes = "Consuming this Api will update a vendor from a resource (vendorDTO).")
     @PutMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public VendorDTO updateVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO) {
         return vendorService.saveVendorByDTO(id, vendorDTO);
     }
 
+    @ApiOperation(value = "This will patch a vendor.",
+            notes = "Consuming this Api will patch a vendor from a resource (vendorDTO).")
     @PatchMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public VendorDTO patchVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO) {
         return vendorService.saveVendorByDTO(id, vendorDTO);
     }
-
+    @ApiOperation(value = "This will delete a vendor.",
+            notes = "Consuming this Api will delete a vendor filtered by ID.")
     @DeleteMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public void deleteVendor(@PathVariable Long id) {

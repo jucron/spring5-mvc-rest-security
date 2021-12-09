@@ -29,14 +29,14 @@ public class SwaggerConfig {
 
     private ApiInfo metaData() {
 
-        Contact contact = new Contact("John Thompson", "https://springframework.guru/about/",
-                "john@springfrmework.guru");
+        Contact contact = new Contact("João Oliveira", "https://github.com/jucron",
+                "jucron@gmail.com");
 
         return new ApiInfo(
-                "Spring Framework Guru",
-                "Spring Framework 5: Beginner to Guru",
+                "Spring Rest App",
+                "A Spring App with Rest Api",
                 "1.0",
-                "Terms of Service: blah",
+                "Terms of Service: -",
                 contact,
                 "Apache License Version 2.0",
                 "https://www.apache.org/licenses/LICENSE-2.0",
