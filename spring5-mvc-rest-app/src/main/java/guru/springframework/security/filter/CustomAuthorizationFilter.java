@@ -1,7 +1,5 @@
 package guru.springframework.security.filter;
 
-//todo 7: Create an authorizationFilter in order to filter requests and allow access accordingly
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -27,9 +25,6 @@ import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-//todo 8: Create CustomAuthorizationFilter, extends OncePerRequestFilter and override doFilterInternal
-// This class verifies the token sent from user and allow them to the application
 
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {

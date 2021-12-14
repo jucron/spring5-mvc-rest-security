@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-//todo 6: Create CustomAuthenticationFilter and override attemptAuthentication and successfulAuthentication
-// This class is to give the user a token once they login successfully
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 

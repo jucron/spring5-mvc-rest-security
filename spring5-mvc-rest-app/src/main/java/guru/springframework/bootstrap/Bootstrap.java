@@ -10,12 +10,14 @@ import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.CustomerRepository;
 import guru.springframework.repositories.VendorRepository;
 import guru.springframework.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 @Component
+@Slf4j
 public class Bootstrap implements CommandLineRunner {
 
     private CategoryRepository categoryRepository;
@@ -38,9 +40,9 @@ public class Bootstrap implements CommandLineRunner {
         populateUsersData();
 
 
-        System.out.println("Data Loaded in Categories = " + categoryRepository.count() +
-                "\n Data Loaded in Customer = " + customerRepository.count());
-
+        log.info("\n- Data Loaded in Categories = " + categoryRepository.count() +
+                "\n- Data Loaded in Customer = " + customerRepository.count()+
+                "\n- Data Loaded in Users = " + userService.getUsers().size());
     }
 
     private void populateUsersData() {

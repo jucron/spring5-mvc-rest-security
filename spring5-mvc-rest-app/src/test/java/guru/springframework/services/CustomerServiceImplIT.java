@@ -7,8 +7,11 @@ import guru.springframework.model.CustomerDTO;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.CustomerRepository;
 import guru.springframework.repositories.VendorRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -22,6 +25,7 @@ import static org.junit.Assert.assertThat;
 
 //@RunWith(SpringRunner.class)
 @DataJpaTest //This annotation only brings up the REPOSITORIES (don't create controllers)
+@Slf4j
 public class CustomerServiceImplIT {
 
     @Autowired
@@ -34,18 +38,22 @@ public class CustomerServiceImplIT {
     VendorRepository vendorRepository;
 
     CustomerService customerService;
+
+    @Mock //Must mock this service to avoid unnecessary data writing in Bootstrap
     UserService userService;
 
     @BeforeEach
     public void setUp() throws Exception {
-        System.out.println("Loading Customer Data");
-        System.out.println(customerRepository.findAll().size());
+        log.info("Loading Customer Data");
+        log.info("Starting CustomerRepo size: {}",customerRepository.findAll().size());
 
         //setup data for testing
         Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository, userService);
         bootstrap.run(); //load data
 
         customerService = new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);
+
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test

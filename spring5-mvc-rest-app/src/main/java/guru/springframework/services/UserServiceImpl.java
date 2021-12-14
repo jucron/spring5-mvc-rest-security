@@ -48,7 +48,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUser(User user) {
-        log.info("Saving new user {} to database", user.getName());
+        log.info("Attempting to save new user {} to database", user.getName());
+        //Checking username in repo:
+        User existingUser = userRepo.findByUsername(user.getUsername());
+        if (existingUser!=null) {
+            log.info("Username {} already exists in DataBase. User not saved.",user.getUsername());
+            return new User();
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }

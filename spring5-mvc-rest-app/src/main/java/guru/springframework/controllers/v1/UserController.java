@@ -39,21 +39,25 @@ public class UserController {
     public List<User> getUsers() {
         return userService.getUsers();
     }
+
     @PostMapping("/user/save")
     @ResponseStatus(HttpStatus.CREATED)
     public User saveUser(@RequestBody User user) {
         return userService.saveUser(user);
     }
+
     @PostMapping("/role/save")
     @ResponseStatus(HttpStatus.CREATED)
     public Role saveUser(@RequestBody Role role) {
         return userService.saveRole(role);
     }
+
     @PostMapping("/role/addtouser")
     @ResponseStatus(HttpStatus.OK)
     public void addRoleToUser(@RequestBody RoleToUserForm form) {
         userService.addRoleToUser(form.getUsername(), form.getLevel());
     }
+
     @GetMapping ("/token/refresh")
     @ResponseStatus(HttpStatus.OK)
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {

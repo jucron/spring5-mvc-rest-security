@@ -1,5 +1,6 @@
 package guru.springframework.security;
 
+import guru.springframework.domain.security.Level;
 import guru.springframework.security.filter.CustomAuthenticationFilter;
 import guru.springframework.security.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -40,9 +39,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable(); //Cross site request forgery
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        //Open entry requests:
         http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/api/users/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+
+        //GET, PUT, PATCH requests
+        http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(
+                Level.USER.toString(),Level.MANAGER.toString(),Level.ADMIN.toString());
+        http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(
+                Level.USER.toString(),Level.MANAGER.toString(),Level.ADMIN.toString());
+        http.authorizeRequests().antMatchers(PATCH, "/api/**").hasAnyAuthority(
+                Level.USER.toString(),Level.MANAGER.toString(),Level.ADMIN.toString());
+        //POST and DELETE requests
+        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(Level.MANAGER.toString());
+        http.authorizeRequests().antMatchers(DELETE, "/api/**").hasAnyAuthority(Level.MANAGER.toString());
+
         http.authorizeRequests().anyRequest().authenticated(); //This makes all requests to be authenticated
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class); //must be before all others filters
@@ -53,8 +64,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }
