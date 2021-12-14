@@ -34,6 +34,7 @@ public class CustomerServiceImplIT {
     VendorRepository vendorRepository;
 
     CustomerService customerService;
+    UserService userService;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -41,7 +42,7 @@ public class CustomerServiceImplIT {
         System.out.println(customerRepository.findAll().size());
 
         //setup data for testing
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository, userService);
         bootstrap.run(); //load data
 
         customerService = new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);
