@@ -1,15 +1,18 @@
-package guru.springframework.services;
+package guru.springframework.services.security;
 
 import guru.springframework.domain.security.Level;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
+import guru.springframework.model.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    User saveUser(User user);
+    UserDTO saveUser(UserDTO userDTO, String pass);
     Role saveRole(Role role);
     void addRoleToUser(String username, Level level);
-    User getUser (String username);
-    List<User> getUsers();
+    UserDTO getUser (String username);
+    List<UserDTO> getUsers();
+
+    User getTrueUser(String username);
 }

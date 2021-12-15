@@ -1,8 +1,10 @@
-package guru.springframework.services;
+package guru.springframework.services.security;
 
+import guru.springframework.api.v1.mapper.UserMapper;
 import guru.springframework.domain.security.Level;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
+import guru.springframework.model.UserDTO;
 import guru.springframework.repositories.security.RoleRepo;
 import guru.springframework.repositories.security.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
-
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,16 +49,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(User user) {
-        log.info("Attempting to save new user {} to database", user.getName());
+    public UserDTO saveUser(UserDTO userDTO, String pass) {
+        log.info("Attempting to save new user {} to database", userDTO.getName());
         //Checking username in repo:
-        User existingUser = userRepo.findByUsername(user.getUsername());
+        User existingUser = userRepo.findByUsername(userDTO.getUsername());
         if (existingUser!=null) {
-            log.info("Username {} already exists in DataBase. User not saved.",user.getUsername());
-            return new User();
+            log.info("Username {} already exists in DataBase. User not saved.",userDTO.getUsername());
+            return new UserDTO();
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        User newUser = userMapper.userDTOToUser(userDTO);
+        newUser.setPassword(passwordEncoder.encode(pass));
+        newUser.setRoles(new ArrayList<>());
+        userRepo.save(newUser);
+
+        return userDTO;
     }
 
     @Override
@@ -75,14 +81,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User getUser(String username) {
+    public UserDTO getUser(String username) {
+        log.info("Fetching user {}", username);
+        return userMapper.userToUserDTO(userRepo.findByUsername(username));
+    }
+    @Override
+    public User getTrueUser(String username) {
         log.info("Fetching user {}", username);
         return userRepo.findByUsername(username);
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         log.info("Fetching all users");
-        return userRepo.findAll();
+        Iterable<User> usersList = userRepo.findAll();
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (User user : usersList) {
+            userDTOList.add(
+                    userMapper.userToUserDTO(user)
+            );
+        }
+        return userDTOList;
     }
 }

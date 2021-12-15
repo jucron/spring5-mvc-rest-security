@@ -5,16 +5,14 @@ import guru.springframework.domain.Customer;
 import guru.springframework.domain.Vendor;
 import guru.springframework.domain.security.Level;
 import guru.springframework.domain.security.Role;
-import guru.springframework.domain.security.User;
+import guru.springframework.model.UserDTO;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.CustomerRepository;
 import guru.springframework.repositories.VendorRepository;
-import guru.springframework.services.UserService;
+import guru.springframework.services.security.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 
 @Component
 @Slf4j
@@ -52,10 +50,17 @@ public class Bootstrap implements CommandLineRunner {
         userService.saveRole(new Role(null, Level.MANAGER));
         userService.saveRole(new Role(null, Level.ADMIN));
 
-        userService.saveUser(new User(null, "John Travolta", "john", "1234", new ArrayList<>()));
-        userService.saveUser(new User(null, "Will Smith", "will", "1234", new ArrayList<>()));
-        userService.saveUser(new User(null, "Jim Carrey", "jim", "1234", new ArrayList<>()));
-        userService.saveUser(new User(null, "Arnold Schwarzenegger", "arnold", "1234", new ArrayList<>()));
+        UserDTO user1DTO = new UserDTO(); user1DTO.setName("John Travolta"); user1DTO.setUsername("john");
+        userService.saveUser(user1DTO, "1234");
+
+        UserDTO user2DTO = new UserDTO(); user2DTO.setName("Will Smith"); user2DTO.setUsername("will");
+        userService.saveUser(user1DTO, "1234");
+
+        UserDTO user3DTO = new UserDTO(); user3DTO.setName("Jim Carrey"); user3DTO.setUsername("jim");
+        userService.saveUser(user1DTO, "1234");
+
+        UserDTO user4DTO = new UserDTO(); user4DTO.setName("Arnold Schwarzenegger"); user4DTO.setUsername("arnold");
+        userService.saveUser(user1DTO, "1234");
 
         userService.addRoleToUser("john", Level.USER);
         userService.addRoleToUser("john", Level.ADMIN);

@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.domain.security.Level;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
-import guru.springframework.services.UserService;
+import guru.springframework.model.UserDTO;
+import guru.springframework.services.security.TokenService;
+import guru.springframework.services.security.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController {
     public static final String BASE_URL = "/api/v1/users";
     private final UserService userService;
+    private final TokenService tokenService;
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return userService.getUsers();
     }
 
     @PostMapping("/user/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public User saveUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public UserDTO saveUser(@RequestBody UserDTO userDTO, @RequestBody String pass) {
+        return userService.saveUser(userDTO, pass);
     }
 
     @PostMapping("/role/save")
@@ -71,7 +74,7 @@ public class UserController {
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
                 String username = decodedJWT.getSubject();
-                User user = userService.getUser(username);
+                User user = userService.getTrueUser(username);
 
                 String access_token = JWT.create()
                         .withSubject(user.getUsername()) //Should choose something unique that identifies (in this app usernames are uniques)
