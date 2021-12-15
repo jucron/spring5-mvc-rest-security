@@ -8,7 +8,7 @@ import guru.springframework.model.UserDTO;
 import java.util.List;
 
 public interface UserService {
-    UserDTO saveUser(UserDTO userDTO, String pass);
+    UserDTO saveUser(UserDTO userDTO);
     Role saveRole(Role role);
     void addRoleToUser(String username, Level level);
     UserDTO getUser (String username);

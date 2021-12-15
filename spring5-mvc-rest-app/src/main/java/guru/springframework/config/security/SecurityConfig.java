@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String OPEN_ENDPOINT_A = "/api/login";
     public static final String OPEN_ENDPOINT_B = "/api/token/refresh";
+    public static final String OPEN_ENDPOINT_C = "/swagger-ui";
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -47,7 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         //Open end-points:
-        http.authorizeRequests().antMatchers(OPEN_ENDPOINT_A+"/**", OPEN_ENDPOINT_B + "/**").permitAll();
+        http.authorizeRequests().antMatchers(OPEN_ENDPOINT_A+"/**",
+                OPEN_ENDPOINT_B + "/**", OPEN_ENDPOINT_C +"/**")
+                .permitAll();
+
 
         //GET, PUT, PATCH requests
         http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(

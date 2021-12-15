@@ -9,7 +9,6 @@ import guru.springframework.domain.security.Level;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
 import guru.springframework.model.UserDTO;
-import guru.springframework.services.security.TokenService;
 import guru.springframework.services.security.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController {
     public static final String BASE_URL = "/api/v1/users";
     private final UserService userService;
-    private final TokenService tokenService;
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -45,8 +43,8 @@ public class UserController {
 
     @PostMapping("/user/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO saveUser(@RequestBody UserDTO userDTO, @RequestBody String pass) {
-        return userService.saveUser(userDTO, pass);
+    public UserDTO saveUser(@RequestBody UserDTO userDTO) {
+        return userService.saveUser(userDTO);
     }
 
     @PostMapping("/role/save")

@@ -50,17 +50,21 @@ public class Bootstrap implements CommandLineRunner {
         userService.saveRole(new Role(null, Level.MANAGER));
         userService.saveRole(new Role(null, Level.ADMIN));
 
-        UserDTO user1DTO = new UserDTO(); user1DTO.setName("John Travolta"); user1DTO.setUsername("john");
-        userService.saveUser(user1DTO, "1234");
+        UserDTO user1DTO = new UserDTO(); user1DTO.setName("John Travolta");
+        user1DTO.setUsername("john"); user1DTO.setPassword("1234");
+        userService.saveUser(user1DTO);
 
-        UserDTO user2DTO = new UserDTO(); user2DTO.setName("Will Smith"); user2DTO.setUsername("will");
-        userService.saveUser(user1DTO, "1234");
+        UserDTO user2DTO = new UserDTO(); user2DTO.setName("Will Smith");
+        user2DTO.setUsername("will"); user2DTO.setPassword("1234");
+        userService.saveUser(user2DTO);
 
-        UserDTO user3DTO = new UserDTO(); user3DTO.setName("Jim Carrey"); user3DTO.setUsername("jim");
-        userService.saveUser(user1DTO, "1234");
+        UserDTO user3DTO = new UserDTO(); user3DTO.setName("Jim Carrey");
+        user3DTO.setUsername("jim"); user3DTO.setPassword("1234");
+        userService.saveUser(user3DTO);
 
-        UserDTO user4DTO = new UserDTO(); user4DTO.setName("Arnold Schwarzenegger"); user4DTO.setUsername("arnold");
-        userService.saveUser(user1DTO, "1234");
+        UserDTO user4DTO = new UserDTO(); user4DTO.setName("Arnold Schwarzenegger");
+        user4DTO.setUsername("arnold"); user4DTO.setPassword("1234");
+        userService.saveUser(user4DTO);
 
         userService.addRoleToUser("john", Level.USER);
         userService.addRoleToUser("john", Level.ADMIN);

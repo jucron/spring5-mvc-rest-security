@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +22,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -49,7 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO, String pass) {
+    public UserDTO saveUser(UserDTO userDTO) {
         log.info("Attempting to save new user {} to database", userDTO.getName());
         //Checking username in repo:
         User existingUser = userRepo.findByUsername(userDTO.getUsername());
@@ -58,10 +56,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return new UserDTO();
         }
         User newUser = userMapper.userDTOToUser(userDTO);
-        newUser.setPassword(passwordEncoder.encode(pass));
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         newUser.setRoles(new ArrayList<>());
         userRepo.save(newUser);
 
+        userDTO.setPassword("hidden");
         return userDTO;
     }
 
@@ -76,14 +75,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepo.findByUsername(username);
         Role role = roleRepo.findByLevel(level);
         user.getRoles().add(role);
-        //no need to call repo.save, since Transactional will take care of that.
+        userRepo.save(user);
         log.info("Adding role {} to user {}", level, username);
     }
 
     @Override
     public UserDTO getUser(String username) {
         log.info("Fetching user {}", username);
-        return userMapper.userToUserDTO(userRepo.findByUsername(username));
+        UserDTO userDTO = userMapper.userToUserDTO(userRepo.findByUsername(username));
+        userDTO.setPassword("hidden");
+        return userDTO;
     }
     @Override
     public User getTrueUser(String username) {
@@ -97,9 +98,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Iterable<User> usersList = userRepo.findAll();
         List<UserDTO> userDTOList = new ArrayList<>();
         for (User user : usersList) {
-            userDTOList.add(
-                    userMapper.userToUserDTO(user)
-            );
+            UserDTO userDTO = userMapper.userToUserDTO(user);
+            userDTO.setPassword("hidden");
+            userDTOList.add(userDTO);
         }
         return userDTOList;
     }
