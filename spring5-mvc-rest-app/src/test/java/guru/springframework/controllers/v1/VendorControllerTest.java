@@ -3,12 +3,11 @@ package guru.springframework.controllers.v1;
 import guru.springframework.api.v1.model.VendorDTO;
 import guru.springframework.api.v1.model.VendorListDTO;
 import guru.springframework.services.VendorService;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,11 +25,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Ignore //Must fix this test later
-@WebMvcTest(controllers = {VendorController.class},
-        useDefaultFilters = false,
-        excludeAutoConfiguration = SecurityAutoConfiguration.class)
-//@WithMockUser(username = "john", roles = {"ADMIN"})
+//@WebMvcTest(controllers = {VendorController.class},
+////        useDefaultFilters = false) This doesn't seem to be working properly.
+@AutoConfigureMockMvc(addFilters = false)
+@SpringBootTest
 public class VendorControllerTest {
 
     @MockBean //provided by Spring Context (This replaces Mockito.INITS)
