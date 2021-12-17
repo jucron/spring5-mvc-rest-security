@@ -3,7 +3,7 @@
 
 # Spring Framework 5 MVC Rest Application - JWT SECURITY
 
-This is a project based in the spring5-mvc-rest Application (from my repository), but with the implementation of a JWT Token security layer.
+This is the same project based on the spring5-mvc-rest Application (from my repository), but with the implementation of a JWT Token security layer.
 
 Check the Swagger Api Documentation: [Live Server Test](https://mvc-rest-security.herokuapp.com/)
 Please NOTE: Swagger documentation will return 'Forbidden 403' response, since fetching Data is limited by security.
