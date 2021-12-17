@@ -1,7 +1,7 @@
 package guru.springframework.services.security;
 
 import guru.springframework.api.v1.mapper.UserMapper;
-import guru.springframework.domain.security.Level;
+import guru.springframework.domain.security.Permissions;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
 import guru.springframework.model.UserDTO;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles()
                 .forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority(role.getLevel().toString())));
+                        authorities.add(new SimpleGrantedAuthority(role.getPermissions().toString())));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 
@@ -66,17 +66,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving new role {} to database", role.getLevel());
+        log.info("Saving new role {} to database", role.getPermissions());
         return roleRepo.save(role);
     }
 
     @Override
-    public void addRoleToUser(String username, Level level) {
+    public void addRoleToUser(String username, Permissions permissions) {
         User user = userRepo.findByUsername(username);
-        Role role = roleRepo.findByLevel(level);
+        Role role = roleRepo.findByPermissions(permissions);
         user.getRoles().add(role);
         userRepo.save(user);
-        log.info("Adding role {} to user {}", level, username);
+        log.info("Adding role {} to user {}", permissions, username);
     }
 
     @Override

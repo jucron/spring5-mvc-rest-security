@@ -3,7 +3,7 @@ package guru.springframework.bootstrap;
 import guru.springframework.domain.Category;
 import guru.springframework.domain.Customer;
 import guru.springframework.domain.Vendor;
-import guru.springframework.domain.security.Level;
+import guru.springframework.domain.security.Permissions;
 import guru.springframework.domain.security.Role;
 import guru.springframework.model.UserDTO;
 import guru.springframework.repositories.CategoryRepository;
@@ -13,6 +13,8 @@ import guru.springframework.services.security.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import static guru.springframework.domain.security.Permissions.*;
 
 @Component
 @Slf4j
@@ -46,9 +48,9 @@ public class Bootstrap implements CommandLineRunner {
     private void populateUsersData() {
 
         //Creating different roles
-        userService.saveRole(new Role(null, Level.USER));
-        userService.saveRole(new Role(null, Level.MANAGER));
-        userService.saveRole(new Role(null, Level.ADMIN));
+        userService.saveRole(new Role(null, USER));
+        userService.saveRole(new Role(null, MANAGER));
+        userService.saveRole(new Role(null, ADMIN));
 
         UserDTO user1DTO = new UserDTO(); user1DTO.setName("John Travolta");
         user1DTO.setUsername("john"); user1DTO.setPassword("1234");
@@ -66,14 +68,14 @@ public class Bootstrap implements CommandLineRunner {
         user4DTO.setUsername("arnold"); user4DTO.setPassword("1234");
         userService.saveUser(user4DTO);
 
-        userService.addRoleToUser("john", Level.USER);
-        userService.addRoleToUser("john", Level.ADMIN);
+        userService.addRoleToUser("john", USER);
+        userService.addRoleToUser("john", ADMIN);
 
-        userService.addRoleToUser("will", Level.MANAGER);
-        userService.addRoleToUser("will", Level.USER);
+        userService.addRoleToUser("will", MANAGER);
+        userService.addRoleToUser("will", USER);
 
-        userService.addRoleToUser("jim", Level.USER);
-        userService.addRoleToUser("arnold", Level.USER);
+        userService.addRoleToUser("jim", USER);
+        userService.addRoleToUser("arnold", USER);
 
     }
 

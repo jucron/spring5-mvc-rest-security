@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.domain.security.Level;
+import guru.springframework.domain.security.Permissions;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
 import guru.springframework.model.UserDTO;
@@ -56,7 +56,7 @@ public class UserController {
     @PostMapping("/role/addtouser")
     @ResponseStatus(HttpStatus.OK)
     public void addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getLevel());
+        userService.addRoleToUser(form.getUsername(), form.getPermissions());
     }
 
     @GetMapping ("/token/refresh")
@@ -79,7 +79,7 @@ public class UserController {
                         .withExpiresAt(new Date(System.currentTimeMillis() +10*60*1000)) // Token expires in 10 minutes
                         .withIssuer(request.getRequestURL().toString()) //Company name or author of this
                         .withClaim("roles", user.getRoles().stream() //Roles of this specific user
-                                .map(Role::getLevel).collect(Collectors.toList()))
+                                .map(Role::getPermissions).collect(Collectors.toList()))
                         .sign(algorithm); //must sign the Token with the algorithm created
 
 
@@ -108,5 +108,5 @@ public class UserController {
 @Data
 class RoleToUserForm {
     private String username;
-    private Level level;
+    private Permissions permissions;
 }

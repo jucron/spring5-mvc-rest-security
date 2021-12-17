@@ -2,7 +2,7 @@ package guru.springframework.config.security;
 
 import guru.springframework.config.security.filter.CustomAuthenticationFilter;
 import guru.springframework.config.security.filter.CustomAuthorizationFilter;
-import guru.springframework.domain.security.Level;
+import guru.springframework.domain.security.Permissions;
 import guru.springframework.services.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static guru.springframework.domain.security.Permissions.*;
+import static guru.springframework.domain.security.Permissions.USER;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -27,12 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String OPEN_ENDPOINT_A = "/api/login";
     public static final String OPEN_ENDPOINT_B = "/api/token/refresh";
-    public static final String OPEN_ENDPOINT_C = "/swagger-ui";
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenService tokenService;
-
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,25 +45,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), tokenService);
         customAuthenticationFilter.setFilterProcessesUrl(OPEN_ENDPOINT_A); //This will customize the login path from SpringSecurity
 
-        http.csrf().disable(); //Cross site request forgery
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable(); //Cross site request forgery deactivation
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //deactivating session
 
         //Open end-points:
-        http.authorizeRequests().antMatchers(OPEN_ENDPOINT_A+"/**",
-                OPEN_ENDPOINT_B + "/**", OPEN_ENDPOINT_C +"/**")
+        http.authorizeRequests().antMatchers(
+                OPEN_ENDPOINT_A+"/**", OPEN_ENDPOINT_B + "/**")
                 .permitAll();
-
 
         //GET, PUT, PATCH requests
         http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(
-                Level.USER.toString(),Level.MANAGER.toString(),Level.ADMIN.toString());
+                USER.toString(), MANAGER.toString(), ADMIN.toString());
         http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(
-                Level.USER.toString(),Level.MANAGER.toString(),Level.ADMIN.toString());
+                USER.toString(), MANAGER.toString(), ADMIN.toString());
         http.authorizeRequests().antMatchers(PATCH, "/api/**").hasAnyAuthority(
-                Level.USER.toString(),Level.MANAGER.toString(),Level.ADMIN.toString());
+                USER.toString(), MANAGER.toString(), ADMIN.toString());
         //POST and DELETE requests
-        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(Level.MANAGER.toString());
-        http.authorizeRequests().antMatchers(DELETE, "/api/**").hasAnyAuthority(Level.MANAGER.toString());
+        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(MANAGER.toString());
+        http.authorizeRequests().antMatchers(DELETE, "/api/**").hasAnyAuthority(ADMIN.toString());
 
         http.authorizeRequests().anyRequest().authenticated(); //This makes all requests to be authenticated
         http.addFilter(customAuthenticationFilter);
