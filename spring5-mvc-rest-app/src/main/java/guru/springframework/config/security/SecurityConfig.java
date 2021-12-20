@@ -2,7 +2,6 @@ package guru.springframework.config.security;
 
 import guru.springframework.config.security.filter.CustomAuthenticationFilter;
 import guru.springframework.config.security.filter.CustomAuthorizationFilter;
-import guru.springframework.domain.security.Permissions;
 import guru.springframework.services.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static guru.springframework.domain.security.Permissions.*;
-import static guru.springframework.domain.security.Permissions.USER;
+import static guru.springframework.domain.security.Permission.USER;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration

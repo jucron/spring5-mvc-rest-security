@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.domain.security.Permissions;
+import guru.springframework.domain.security.Permission;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
 import guru.springframework.model.UserDTO;
@@ -78,7 +78,7 @@ public class UserController {
                         .withSubject(user.getUsername()) //Should choose something unique that identifies (in this app usernames are uniques)
                         .withExpiresAt(new Date(System.currentTimeMillis() +10*60*1000)) // Token expires in 10 minutes
                         .withIssuer(request.getRequestURL().toString()) //Company name or author of this
-                        .withClaim("roles", user.getRoles().stream() //Roles of this specific user
+                        .withClaim("permissions", user.getRole().getPermissions().stream() //Roles of this specific user
                                 .map(Role::getPermissions).collect(Collectors.toList()))
                         .sign(algorithm); //must sign the Token with the algorithm created
 
@@ -108,5 +108,5 @@ public class UserController {
 @Data
 class RoleToUserForm {
     private String username;
-    private Permissions permissions;
+    private Permission permissions;
 }

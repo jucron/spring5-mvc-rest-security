@@ -3,8 +3,9 @@ package guru.springframework.bootstrap;
 import guru.springframework.domain.Category;
 import guru.springframework.domain.Customer;
 import guru.springframework.domain.Vendor;
-import guru.springframework.domain.security.Permissions;
+import guru.springframework.domain.security.Permission;
 import guru.springframework.domain.security.Role;
+import guru.springframework.domain.security.RoleList;
 import guru.springframework.model.UserDTO;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.CustomerRepository;
@@ -14,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import static guru.springframework.domain.security.Permissions.*;
+import java.util.HashSet;
+
+import static guru.springframework.domain.security.Permission.*;
 
 @Component
 @Slf4j
@@ -48,9 +51,10 @@ public class Bootstrap implements CommandLineRunner {
     private void populateUsersData() {
 
         //Creating different roles
-        userService.saveRole(new Role(null, USER));
-        userService.saveRole(new Role(null, MANAGER));
-        userService.saveRole(new Role(null, ADMIN));
+
+        userService.saveRole(new Role(null, "ROLE_ADMIN", RoleList.ADMIN.getPermissions()));
+        userService.saveRole(new Role(null,"ROLE_MANAGER", RoleList.MANAGER.getPermissions()));
+        userService.saveRole(new Role(null,"ROLE_USER", RoleList.USER.getPermissions()));
 
         UserDTO user1DTO = new UserDTO(); user1DTO.setName("John Travolta");
         user1DTO.setUsername("john"); user1DTO.setPassword("1234");
@@ -68,14 +72,10 @@ public class Bootstrap implements CommandLineRunner {
         user4DTO.setUsername("arnold"); user4DTO.setPassword("1234");
         userService.saveUser(user4DTO);
 
-        userService.addRoleToUser("john", USER);
-        userService.addRoleToUser("john", ADMIN);
-
-        userService.addRoleToUser("will", MANAGER);
-        userService.addRoleToUser("will", USER);
-
-        userService.addRoleToUser("jim", USER);
-        userService.addRoleToUser("arnold", USER);
+        userService.addRoleToUser("john", "ROLE_ADMIN");
+        userService.addRoleToUser("will", "ROLE_MANAGER");
+        userService.addRoleToUser("jim", "ROLE_USER");
+        userService.addRoleToUser("arnold", "ROLE_USER");
 
     }
 

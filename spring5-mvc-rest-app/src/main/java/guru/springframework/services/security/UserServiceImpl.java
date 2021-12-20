@@ -1,7 +1,7 @@
 package guru.springframework.services.security;
 
 import guru.springframework.api.v1.mapper.UserMapper;
-import guru.springframework.domain.security.Permissions;
+import guru.springframework.domain.security.Permission;
 import guru.springframework.domain.security.Role;
 import guru.springframework.domain.security.User;
 import guru.springframework.model.UserDTO;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles()
                 .forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority(role.getPermissions().toString())));
+                        authorities.add(new SimpleGrantedAuthority(role.getPermissions())));
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         User newUser = userMapper.userDTOToUser(userDTO);
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        newUser.setRoles(new ArrayList<>());
+        // Note: Role of this User is not yet defined
         userRepo.save(newUser);
 
         userDTO.setPassword("hidden");
@@ -71,12 +71,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void addRoleToUser(String username, Permissions permissions) {
+    public void addRoleToUser(String username, String roleName) {
         User user = userRepo.findByUsername(username);
-        Role role = roleRepo.findByPermissions(permissions);
-        user.getRoles().add(role);
-        userRepo.save(user);
-        log.info("Adding role {} to user {}", permissions, username);
+        Role role = roleRepo.findByName(roleName);
+        if (role==null) {
+            log.info("Role not found, operation cancelled)";
+        } else {
+            user.setRole(role);
+            userRepo.save(user);
+            log.info("Adding role {} to user {}", roleName, username);
+        }
     }
 
     @Override
