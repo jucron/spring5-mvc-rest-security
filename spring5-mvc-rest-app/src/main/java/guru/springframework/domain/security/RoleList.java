@@ -6,13 +6,13 @@ import java.util.Set;
 import static guru.springframework.domain.security.Permission.*;
 
 public enum RoleList {
-        ADMIN(new HashSet<String>() {{
+        USER(new HashSet<String>() {{
             add(READ.permission);
         }}),
         MANAGER(new HashSet<String>() {{
             add(READ.permission); add(UPDATE.permission); add(WRITE.permission);
         }}),
-        USER(new HashSet<String>() {{
+        ADMIN(new HashSet<String>() {{
             add(READ.permission); add(UPDATE.permission); add(WRITE.permission); add(DELETE.permission);
         }});
         private Set<String> permissions;

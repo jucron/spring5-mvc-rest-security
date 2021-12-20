@@ -20,7 +20,7 @@ public class Role {
 
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER) //Note: Collections are Lazy Fetch by default, must customize Fetch in this.
     private Set<String> permissions;
 
 }

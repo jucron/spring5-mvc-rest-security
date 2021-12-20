@@ -38,7 +38,7 @@ public class TokenServiceImpl implements TokenService {
                 .withSubject(user.getUsername()) //Should choose something unique that identifies (in this app usernames are uniques)
                 .withExpiresAt(new Date(System.currentTimeMillis() +accessTimeout)) // Access Token (Bearer) will expire in 10 minutes
                 .withIssuer(request.getRequestURL().toString()) //Company name or author of this
-                .withClaim("roles", user.getAuthorities().stream() //Roles of this specific user
+                .withClaim("permissions", user.getAuthorities().stream() //Roles of this specific user
                         .map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(this.getAlgorithm()); //must sign the Token with the algorithm created
         String refresh_token = JWT.create()
@@ -61,7 +61,7 @@ public class TokenServiceImpl implements TokenService {
         DecodedJWT decodedJWT = verifier.verify(token);
 
         String username = decodedJWT.getSubject();
-        String[] roles = decodedJWT.getClaim("roles").asArray(String.class); //Variable name in User Class
+        String[] roles = decodedJWT.getClaim("permissions").asArray(String.class); //Variable name in User Class
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         stream(roles).forEach(role -> {

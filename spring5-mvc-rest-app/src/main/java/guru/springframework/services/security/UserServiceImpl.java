@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +41,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.info("User found in database: {}", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles()
-                .forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority(role.getPermissions())));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        Set<String> permissions =  user.getRole().getPermissions();
+        for (String permission : permissions) {
+            authorities.add(new SimpleGrantedAuthority(permission));
+        }
+//        user.getRole().getPermissions().forEach(permission ->
+//                        authorities.add(new SimpleGrantedAuthority(permission)));
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving new role {} to database", role.getPermissions());
+        log.info("Saving new role {} to database", role.getName());
         return roleRepo.save(role);
     }
 
@@ -75,7 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepo.findByUsername(username);
         Role role = roleRepo.findByName(roleName);
         if (role==null) {
-            log.info("Role not found, operation cancelled)";
+            log.info("Role not found, operation cancelled");
         } else {
             user.setRole(role);
             userRepo.save(user);

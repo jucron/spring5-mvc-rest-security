@@ -7,6 +7,7 @@ import guru.springframework.model.CustomerDTO;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.CustomerRepository;
 import guru.springframework.repositories.VendorRepository;
+import guru.springframework.repositories.security.RoleRepo;
 import guru.springframework.services.security.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

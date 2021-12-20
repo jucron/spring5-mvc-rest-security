@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static guru.springframework.config.security.SecurityConfig.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -30,8 +31,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override //This intercepts any requests and customize authorizations
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // We need to clear the path for the standard login first
-        if (request.getServletPath().equals(SecurityConfig.OPEN_ENDPOINT_A) ||
-                request.getServletPath().equals(SecurityConfig.OPEN_ENDPOINT_B)) {
+        if (request.getServletPath().equals(OPEN_ENDPOINT_A) ||
+                request.getServletPath().equals(OPEN_ENDPOINT_B)) {
             filterChain.doFilter(request, response); //this let the request goes through
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);

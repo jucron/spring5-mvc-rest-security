@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -56,7 +53,7 @@ public class UserController {
     @PostMapping("/role/addtouser")
     @ResponseStatus(HttpStatus.OK)
     public void addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getPermissions());
+        userService.addRoleToUser(form.getUsername(), form.getRoleName());
     }
 
     @GetMapping ("/token/refresh")
@@ -78,8 +75,7 @@ public class UserController {
                         .withSubject(user.getUsername()) //Should choose something unique that identifies (in this app usernames are uniques)
                         .withExpiresAt(new Date(System.currentTimeMillis() +10*60*1000)) // Token expires in 10 minutes
                         .withIssuer(request.getRequestURL().toString()) //Company name or author of this
-                        .withClaim("permissions", user.getRole().getPermissions().stream() //Roles of this specific user
-                                .map(Role::getPermissions).collect(Collectors.toList()))
+                        .withClaim("permissions", new ArrayList<>(user.getRole().getPermissions()))
                         .sign(algorithm); //must sign the Token with the algorithm created
 
 
@@ -108,5 +104,5 @@ public class UserController {
 @Data
 class RoleToUserForm {
     private String username;
-    private Permission permissions;
+    private String roleName;
 }

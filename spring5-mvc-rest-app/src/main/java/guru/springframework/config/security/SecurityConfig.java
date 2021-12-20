@@ -2,6 +2,7 @@ package guru.springframework.config.security;
 
 import guru.springframework.config.security.filter.CustomAuthenticationFilter;
 import guru.springframework.config.security.filter.CustomAuthorizationFilter;
+import guru.springframework.domain.security.Permission;
 import guru.springframework.services.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static guru.springframework.domain.security.Permission.USER;
+import static guru.springframework.domain.security.Permission.*;
 import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.DELETE;
 
 @Configuration
 @EnableWebSecurity
@@ -46,21 +48,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable(); //Cross site request forgery deactivation
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //deactivating session
 
-        //Open end-points:
+        //Open end-points (For Login and Refresh:
         http.authorizeRequests().antMatchers(
                 OPEN_ENDPOINT_A+"/**", OPEN_ENDPOINT_B + "/**")
                 .permitAll();
 
         //GET, PUT, PATCH requests
-        http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(
-                USER.toString(), MANAGER.toString(), ADMIN.toString());
-        http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(
-                USER.toString(), MANAGER.toString(), ADMIN.toString());
-        http.authorizeRequests().antMatchers(PATCH, "/api/**").hasAnyAuthority(
-                USER.toString(), MANAGER.toString(), ADMIN.toString());
+        http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(READ.permission);
+        http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(UPDATE.permission);
+        http.authorizeRequests().antMatchers(PATCH, "/api/**").hasAnyAuthority(UPDATE.permission);
         //POST and DELETE requests
-        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(MANAGER.toString());
-        http.authorizeRequests().antMatchers(DELETE, "/api/**").hasAnyAuthority(ADMIN.toString());
+        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(WRITE.permission);
+        http.authorizeRequests().antMatchers(DELETE, "/api/**").hasAnyAuthority(Permission.DELETE.permission);
 
         http.authorizeRequests().anyRequest().authenticated(); //This makes all requests to be authenticated
         http.addFilter(customAuthenticationFilter);
@@ -73,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Override
+    @Override //No security webpoints
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/", "/","index",
                 "/v2/api-docs",

@@ -10,12 +10,14 @@ import guru.springframework.model.UserDTO;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.CustomerRepository;
 import guru.springframework.repositories.VendorRepository;
+import guru.springframework.repositories.security.RoleRepo;
 import guru.springframework.services.security.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 
 import static guru.springframework.domain.security.Permission.*;
 
@@ -28,7 +30,8 @@ public class Bootstrap implements CommandLineRunner {
     private VendorRepository vendorRepository;
     private UserService userService;
 
-    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository, VendorRepository vendorRepository, UserService userService) {
+    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository,
+                     VendorRepository vendorRepository, UserService userService) {
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
         this.vendorRepository = vendorRepository;
@@ -55,6 +58,7 @@ public class Bootstrap implements CommandLineRunner {
         userService.saveRole(new Role(null, "ROLE_ADMIN", RoleList.ADMIN.getPermissions()));
         userService.saveRole(new Role(null,"ROLE_MANAGER", RoleList.MANAGER.getPermissions()));
         userService.saveRole(new Role(null,"ROLE_USER", RoleList.USER.getPermissions()));
+
 
         UserDTO user1DTO = new UserDTO(); user1DTO.setName("John Travolta");
         user1DTO.setUsername("john"); user1DTO.setPassword("1234");
